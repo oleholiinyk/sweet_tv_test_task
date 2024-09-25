@@ -127,6 +127,16 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'rssreader' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/rss_reader.log'),
+            'level' => 'info',
+            'formatter_with' => [
+                'format' => '[%datetime%] %channel%.%level_name%: %message% %context% %extra%',
+            ],
+            'days' => 14,
+        ],
+
     ],
 
 ];

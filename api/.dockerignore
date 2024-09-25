@@ -1,0 +1,32 @@
+# Ignore node modules and vendor directories
+node_modules
+vendor
+
+# Ignore build directories
+public/storage
+storage/*.key
+storage/*.log
+
+# Ignore environment files
+.env
+.env.*.backup
+
+# Ignore Laravel log files
+storage/logs/*
+!storage/logs/.gitignore
+
+# Ignore Laravel caches
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# Ignore IDE-specific files
+.idea
+.vscode
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore Git-related files
+.git
+.gitignore
