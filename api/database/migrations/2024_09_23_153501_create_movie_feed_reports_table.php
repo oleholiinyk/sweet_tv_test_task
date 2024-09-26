@@ -18,8 +18,7 @@ return new class extends Migration
             $table->integer('movies_count');
             $table->integer('countries_count');
             $table->float('average_actors_count');
-            $table->integer('subscription_movies_count');
-            $table->integer('purchase_movies_count');
+            $table->json('viewing_options_movies_count');
             $table->json('movies_by_country');
             $table->json('genre_stats');
             $table->json('top_keywords');

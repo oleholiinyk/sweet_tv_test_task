@@ -22,7 +22,7 @@ class GenerateReportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'max_result' => 'required|integer|min:2|max:200',
+            'max_result' => 'required|integer|min:10|max:200',
             'start_index' => 'required|integer|min:0|max:2000',
         ];
     }

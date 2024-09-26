@@ -10,6 +10,6 @@ Route::get('/user', function (Request $request) {
 
 
 Route::prefix('/movies/feed/reports')->group(function () {
-    Route::post('/generate', [MovieFeedReportController::class, 'generate']);
+    Route::post('/generate', MovieFeedReportController::class);
 });
 

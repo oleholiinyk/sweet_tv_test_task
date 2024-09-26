@@ -12,6 +12,7 @@ class MovieFeedReportResource extends JsonResource
      * @var MovieFeedReport
      */
     public $resource;
+
     /**
      * Transform the resource into an array.
      *
@@ -20,16 +21,15 @@ class MovieFeedReportResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            $this->resource->id,
-            $this->resource->start_index,
-            $this->resource->movies_count,
-            $this->resource->average_actors_count,
-            $this->resource->subscription_movies_count,
-            $this->resource->purchase_movies_count,
-            $this->resource->movies_by_country,
-            $this->resource->genre_stats,
-            $this->resource->top_keywords,
-            $this->resource->movies_by_year,
+            'id' => $this->resource->id,
+            'start_index' => $this->resource->start_index,
+            'movies_count' => $this->resource->movies_count,
+            'average_actors_count' => $this->resource->average_actors_count,
+            'viewing_options_movies_count' => $this->resource->viewing_options_movies_count,
+            'movies_by_country' => $this->resource->movies_by_country,
+            'genre_stats' => $this->resource->genre_stats,
+            'top_keywords' => $this->resource->top_keywords,
+            'movies_by_year' => $this->resource->movies_by_year,
         ];
     }
 }

@@ -3,6 +3,8 @@
 namespace App\FileReader;
 
 use App\Contracts\FileReaderProvider;
+use App\Exceptions\FileReaderException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Psr\Log\LoggerInterface;
@@ -14,7 +16,7 @@ class RssFileReader implements FileReaderProvider
 
     protected array $resultData = [];
 
-    const NUMERIC_TAGS = ['credit', 'viewingoption'];
+    const NUMERIC_TAGS = ['credit', 'viewingoption', 'genre', 'country'];
 
     public function __construct()
     {
@@ -22,7 +24,7 @@ class RssFileReader implements FileReaderProvider
         $this->resultData = [];
     }
 
-    public function read(string $url, array $queryParams = []): array
+    public function read(string $url, array $queryParams = []): Collection
     {
         $uri = $this->buildUrl($url, $queryParams);
 
@@ -31,10 +33,11 @@ class RssFileReader implements FileReaderProvider
 
             $this->resultData = $this->parseItems($xml);
 
-            return $this->resultData;
-        } catch (\Exception $e) {
+            return collect($this->resultData);
+        } catch (FileReaderException $e) {
             $this->logger->error('Failed to read or parse the RSS feed', ['exception' => $e]);
-            return [];
+
+            return collect();
         }
     }
 
@@ -47,7 +50,7 @@ class RssFileReader implements FileReaderProvider
 
             $value = (count($element->children()) > 0)
                 ? $this->parseXmlRecursively($element)
-                : (string)$element;
+                : trim((string)$element);
 
             $locale = (string)$element['locale'];
 
@@ -111,12 +114,12 @@ class RssFileReader implements FileReaderProvider
         $response = Http::get($url);
 
         if ($response->failed()) {
-            Log::channel('rss_reader')->error('Failed to fetch URL', [
+            $this->logger->error('Failed to fetch URL', [
                 'url' => $url,
                 'status' => $response->status(),
             ]);
 
-            throw new \Exception('Failed to fetch the URL: ' . $url);
+            throw new FileReaderException('Failed to fetch the URL: ' . $url);
         }
 
         return $response->body();

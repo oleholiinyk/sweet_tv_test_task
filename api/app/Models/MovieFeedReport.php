@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $max_result
  * @property int $start_index
  * @property int $movies_count
+ * @property int $countries_count
  * @property int $average_actors_count
- * @property int $subscription_movies_count
- * @property int $purchase_movies_count
- * @property int $movies_by_country
+ * @property array $viewing_options_movies_count
+ * @property array $movies_by_country
  * @property array $genre_stats
  * @property array $top_keywords
  * @property array $movies_by_year
@@ -28,8 +28,7 @@ class MovieFeedReport extends Model
         'movies_count',
         'countries_count',
         'average_actors_count',
-        'subscription_movies_count',
-        'purchase_movies_count',
+        'viewing_options_movies_count',
         'movies_by_country',
         'genre_stats',
         'top_keywords',
@@ -37,6 +36,7 @@ class MovieFeedReport extends Model
     ];
 
     protected $casts = [
+        'viewing_options_movies_count' => 'array',
         'movies_by_country' => 'array',
         'genre_stats' => 'array',
         'top_keywords' => 'array',
