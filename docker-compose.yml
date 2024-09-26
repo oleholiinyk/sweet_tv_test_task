@@ -1,0 +1,70 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: sweet-tv-api-fpm
+    volumes:
+      - ./api:/var/www/api
+    ports:
+      - "9000:9000"
+    networks:
+      - sweet-tv-api-network
+    restart: always
+    depends_on:
+      - db
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: sweet-tv-app
+    ports:
+      - 3200:80
+    volumes:
+      - ./app:/var/www/app
+    networks:
+      - sweet-tv-app-network
+    restart: always
+#
+  db:
+    image: mysql:8.0
+    container_name: sweet-tv-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+      - ./docker/mysql/data:/var/lib/mysql
+    networks:
+      - sweet-tv-api-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: sweet-tv-nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:8080"
+      - "8000:8999"
+    volumes:
+#      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/conf.d/local:/etc/nginx/conf.d
+      - ./api:/var/www/api
+    depends_on:
+      - app
+      - api
+    networks:
+      - sweet-tv-api-network
+      - sweet-tv-app-network
+
+networks:
+  sweet-tv-api-network:
+    driver: bridge
+  sweet-tv-app-network:
+    driver: bridge

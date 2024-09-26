@@ -1,6 +1,6 @@
 FROM node:20 AS build
 
-WORKDIR /var/www/sweet-tv/app
+WORKDIR /var/www/app
 
 RUN npm install -g pnpm
 
@@ -13,7 +13,7 @@ RUN pnpm run build
 
 FROM nginx:alpine as build-stage
 
-COPY --from=build /var/www/sweet-tv/app/dist /usr/share/nginx/html
+COPY --from=build /var/www/app/dist /usr/share/nginx/html
 
 EXPOSE 80
 
