@@ -22,6 +22,7 @@ class MovieFeedReportResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'max_result' => $this->resource->max_result,
             'start_index' => $this->resource->start_index,
             'movies_count' => $this->resource->movies_count,
             'average_actors_count' => $this->resource->average_actors_count,
